@@ -4,7 +4,7 @@
 MotorListener::MotorListener() : Node("motor_listener")
 {
     subscription_ = this->create_subscription<geometry_msgs::msg::Twist>
-    ("/cmd_vel", 10, std::bind(&MotorListener::cmd_vel_callback, this, std::placeholders::_1));
+    ("/ctrl_cmd_vel", 10, std::bind(&MotorListener::cmd_vel_callback, this, std::placeholders::_1));
 }
 
 void MotorListener::cmd_vel_callback(const geometry_msgs::msg::Twist::SharedPtr msg)
