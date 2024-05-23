@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <package format="3">
-  <name>simple_talker</name>
+  <name>simple_listener</name>
   <version>0.0.0</version>
   <description>hoge</description>
   <maintainer email="shun.saito.6t@stu.hosei.ac.jp">shunsugar</maintainer>
