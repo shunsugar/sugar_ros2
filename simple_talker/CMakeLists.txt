@@ -8,6 +8,7 @@ find_package(rclcpp REQUIRED)
 find_package(rclpy REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
+find_package(sensor_msgs REQUIRED)
 
 # Add include directories
 include_directories(include)
@@ -29,6 +30,24 @@ ament_target_dependencies(simple_talker_twist rclcpp geometry_msgs)
 # Install cpp executables
 install(TARGETS
   simple_talker_twist
+  DESTINATION lib/${PROJECT_NAME})
+
+# Create cpp executables
+add_executable(simple_talker_laserscan src/simple_talker_laserscan.cpp)
+ament_target_dependencies(simple_talker_laserscan rclcpp sensor_msgs)
+
+# Install cpp executables
+install(TARGETS
+  simple_talker_laserscan
+  DESTINATION lib/${PROJECT_NAME})
+
+# Create cpp executables
+add_executable(simple_talker_pointcloud2 src/simple_talker_pointcloud2.cpp)
+ament_target_dependencies(simple_talker_pointcloud2 rclcpp sensor_msgs)
+
+# Install cpp executables
+install(TARGETS
+  simple_talker_pointcloud2
   DESTINATION lib/${PROJECT_NAME})
 
 # ---------- python ---------- #
