@@ -4,7 +4,8 @@
 SimpleTalkerLaserScan::SimpleTalkerLaserScan() : Node("simple_talker_laserscan")
 {
     laserscan_pub_ = this->create_publisher<sensor_msgs::msg::LaserScan>("/laserscan_msg", 10);
-    timer_ = this->create_wall_timer(std::chrono::milliseconds(1000), std::bind(&SimpleTalkerLaserScan::publish_laserscan, this));
+    timer_ = this->create_wall_timer(std::chrono::milliseconds(1000), 
+    std::bind(&SimpleTalkerLaserScan::publish_laserscan, this));
 }
 
 void SimpleTalkerLaserScan::publish_laserscan()

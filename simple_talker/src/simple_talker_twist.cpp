@@ -4,7 +4,8 @@
 SimpleTalkerTwist::SimpleTalkerTwist() : Node("simple_talker_twist")
 {
     twist_pub_ = this->create_publisher<geometry_msgs::msg::Twist>("/twist_msg", 10);
-    timer_ = this->create_wall_timer(std::chrono::milliseconds(1000), std::bind(&SimpleTalkerTwist::publish_twist, this));
+    timer_ = this->create_wall_timer(std::chrono::milliseconds(1000), 
+    std::bind(&SimpleTalkerTwist::publish_twist, this));
 }
 
 void SimpleTalkerTwist::publish_twist()
