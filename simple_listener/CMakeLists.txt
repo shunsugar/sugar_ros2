@@ -20,4 +20,12 @@ install(TARGETS
   simple_listener_string
   DESTINATION lib/${PROJECT_NAME})
 
+# Install python modules
+ament_python_install_package(${PROJECT_NAME})
+
+# Install python executables
+install(PROGRAMS
+  simple_listener/simple_listener_string.py
+  DESTINATION lib/${PROJECT_NAME})
+
 ament_package()
