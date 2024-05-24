@@ -4,7 +4,8 @@
 SimpleTalkerString::SimpleTalkerString() : Node("simple_talker_string")
 {
     string_pub_ = this->create_publisher<std_msgs::msg::String>("/string_msg", 10);
-    timer_ = this->create_wall_timer(std::chrono::milliseconds(1000), std::bind(&SimpleTalkerString::publish_string, this));
+    timer_ = this->create_wall_timer(std::chrono::milliseconds(1000), 
+    std::bind(&SimpleTalkerString::publish_string, this));
 }
 
 void SimpleTalkerString::publish_string()
