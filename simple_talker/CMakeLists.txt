@@ -7,10 +7,12 @@ find_package(ament_cmake_python REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclpy REQUIRED)
 find_package(std_msgs REQUIRED)
+find_package(geometry_msgs REQUIRED)
 
 # Add include directories
 include_directories(include)
 
+# ---------- cpp ---------- #
 # Create cpp executables
 add_executable(simple_talker_string src/simple_talker_string.cpp)
 ament_target_dependencies(simple_talker_string rclcpp std_msgs)
@@ -20,6 +22,16 @@ install(TARGETS
   simple_talker_string
   DESTINATION lib/${PROJECT_NAME})
 
+# Create cpp executables
+add_executable(simple_talker_twist src/simple_talker_twist.cpp)
+ament_target_dependencies(simple_talker_twist rclcpp geometry_msgs)
+
+# Install cpp executables
+install(TARGETS
+  simple_talker_twist
+  DESTINATION lib/${PROJECT_NAME})
+
+# ---------- python ---------- #
 # Install python modules
 ament_python_install_package(${PROJECT_NAME})
 
