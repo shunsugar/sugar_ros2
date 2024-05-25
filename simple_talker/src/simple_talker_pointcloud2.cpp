@@ -11,6 +11,7 @@ SimpleTalkerPointCloud2::SimpleTalkerPointCloud2() : Node("simple_talker_pointcl
 void SimpleTalkerPointCloud2::publish_pointcloud2()
 {
     auto pointcloud2_msg = sensor_msgs::msg::PointCloud2();
+    pointcloud2_msg.header.frame_id = "/pointcloud2_msg_frame";
     pointcloud2_msg.point_step = 10;
     pointcloud2_pub_->publish(pointcloud2_msg);
 }
