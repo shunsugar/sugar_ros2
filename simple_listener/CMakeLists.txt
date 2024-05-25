@@ -41,6 +41,15 @@ install(TARGETS
   simple_listener_laserscan
   DESTINATION lib/${PROJECT_NAME})
 
+# Create cpp executables
+add_executable(simple_listener_pointcloud2 src/simple_listener_pointcloud2.cpp)
+ament_target_dependencies(simple_listener_pointcloud2 rclcpp sensor_msgs)
+
+# Install cpp executables
+install(TARGETS
+  simple_listener_pointcloud2
+  DESTINATION lib/${PROJECT_NAME})
+
 # ---------- python ---------- #
 # Install python modules
 ament_python_install_package(${PROJECT_NAME})
