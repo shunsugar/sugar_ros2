@@ -1,4 +1,4 @@
-# sugar_cat2
+# sugar_ros2
 This repository is for learning the basics, including ROS2 nodes and topics.
 
 
