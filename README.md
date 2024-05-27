@@ -3,10 +3,10 @@ This repository is for learning the basics, including ROS2 nodes and topics.
 
 
 ## Setup⚙️
-The following command will copy the sugar_cat2 directory to your workspace.
+The following command will copy the sugar_ros2 directory to your workspace.
 ```
 cd ~/ros2_ws/src
-git clone https://github.com/shunsugar/sugar_cat2.git
+git clone https://github.com/shunsugar/sugar_ros2.git
 cd ~/ros2_ws
 colcon build
 source ~/.bashrc
