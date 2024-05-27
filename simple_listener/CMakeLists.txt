@@ -59,4 +59,11 @@ install(PROGRAMS
   simple_listener/simple_listener_string.py
   DESTINATION lib/${PROJECT_NAME})
 
+# ---------- launch ---------- #
+# Install launch files
+install(DIRECTORY
+  launch
+  DESTINATION share/${PROJECT_NAME}
+)
+
 ament_package()
