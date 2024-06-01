@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+
+<package format="3">
+  <name>compute_orientation</name>
+  <version>0.0.0</version>
+  <description>hoge</description>
+  <maintainer email="shun.saito.6t@stu.hosei.ac.jp">shunsugar</maintainer>
+  <license>Apache-2.0</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  
+  <depend>rclcpp</depend>
+  <depend>sensor_msgs</depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>
