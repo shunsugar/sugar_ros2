@@ -12,8 +12,6 @@ public:
   void publishMsg(const sensor_msgs::msg::Imu::SharedPtr msg);
 
 private:
-  //std::vector<float> computeOrientationData(const std::vector<int16_t>& data);
-
   rclcpp::Publisher<sensor_msgs::msg::Imu>::SharedPtr imu_pub_;
   rclcpp::Subscription<sensor_msgs::msg::Imu>::SharedPtr livox_imu_sub_;
 
