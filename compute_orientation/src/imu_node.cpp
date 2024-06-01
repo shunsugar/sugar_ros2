@@ -12,15 +12,15 @@ ImuNode::ImuNode() : Node("imu_node")
 void ImuNode::computeOrientationData(const sensor_msgs::msg::Imu::SharedPtr msg)
 {
   RCLCPP_INFO(rclcpp::get_logger(imu_topic_), "Received /livox/imu");
-  //publishMsg(msg);
+  publishMsg(msg);
 }
-/*
+
 void ImuNode::publishMsg(const sensor_msgs::msg::Imu::SharedPtr msg)
 {
-  //RCLCPP_INFO(rclcpp::get_logger(imu_topic_), "Published %s", imu_topic_);
-  imu_pub_->publish(msg);
+  RCLCPP_INFO(rclcpp::get_logger(imu_topic_), "Published %s", imu_topic_.c_str());
+  imu_pub_->publish(*msg);
 }
-*/
+
 int main(int argc, char* argv[])
 {
   rclcpp::init(argc, argv);

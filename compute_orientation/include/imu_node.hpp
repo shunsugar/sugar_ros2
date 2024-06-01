@@ -8,10 +8,10 @@ class ImuNode : public rclcpp::Node
 {
 public:
   ImuNode();
-  //void publishMsg(const sensor_msgs::msg::Imu::SharedPtr msg);
+  void computeOrientationData(const sensor_msgs::msg::Imu::SharedPtr msg);
+  void publishMsg(const sensor_msgs::msg::Imu::SharedPtr msg);
 
 private:
-  void computeOrientationData(const sensor_msgs::msg::Imu::SharedPtr msg);
   //std::vector<float> computeOrientationData(const std::vector<int16_t>& data);
 
   rclcpp::Publisher<sensor_msgs::msg::Imu>::SharedPtr imu_pub_;
