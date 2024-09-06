@@ -1,10 +1,10 @@
-#ifndef IMU_NODE_HPP_
-#define IMU_NODE_HPP_
+#ifndef IMU_NODE_GYRO_HPP_
+#define IMU_NODE_GYRO_HPP_
 
 #include "rclcpp/rclcpp.hpp"
 #include "sensor_msgs/msg/imu.hpp"
 #include <array>
-#include <cmath> //
+#include <cmath>
 
 class ImuNode : public rclcpp::Node
 {
@@ -26,4 +26,4 @@ private:
   std::array<double, 4> q_;
 };
 
-# endif // IMU_NODE_HPP_
+# endif // IMU_NODE_GYRO_HPP_

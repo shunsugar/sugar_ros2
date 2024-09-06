@@ -11,12 +11,21 @@ include_directories(include)
 
 # ---------- cpp ---------- #
 # Create cpp executable
-add_executable(imu_node src/imu_node.cpp)
-ament_target_dependencies(imu_node rclcpp sensor_msgs)
+add_executable(imu_node_gyro src/imu_node_gyro.cpp)
+ament_target_dependencies(imu_node_gyro rclcpp sensor_msgs)
 
 # Install cpp executable
 install(TARGETS
-  imu_node
+  imu_node_gyro
+  DESTINATION lib/${PROJECT_NAME})
+
+# Create cpp executable
+add_executable(imu_node_gyro_accel src/imu_node_gyro_accel.cpp)
+ament_target_dependencies(imu_node_gyro_accel rclcpp sensor_msgs)
+
+# Install cpp executable
+install(TARGETS
+  imu_node_gyro_accel
   DESTINATION lib/${PROJECT_NAME})
 
 ament_package()

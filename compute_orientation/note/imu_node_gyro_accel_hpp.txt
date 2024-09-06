@@ -1,10 +1,10 @@
-#ifndef IMU_NODE_HPP_
-#define IMU_NODE_HPP_
+#ifndef IMU_NODE_GYRO_ACCEL_HPP_
+#define IMU_NODE_GYRO_ACCEL_HPP_
 
 #include "rclcpp/rclcpp.hpp"
 #include "sensor_msgs/msg/imu.hpp"
 #include <array>
-#include <cmath> //
+#include <cmath>
 
 class ImuNode : public rclcpp::Node
 {
@@ -17,6 +17,14 @@ private:
                           const std::array<double, 4>& q2,
                           std::array<double, 4>& q_out);
   void normalizeQuaternion(std::array<double, 4>& q);
+  void rotateAccelerationVector(const std::array<double, 4>& q,
+                                std::array<double, 4>& alpha);
+  void crossProduct(const std::vector<double>& v1,
+                    const std::vector<double>& v2,
+                    std::vector<double>& v_out);
+  void dotProduct(const std::vector<double>& v1,
+                  const std::vector<double>& v2,
+                  std::vector<double>& v_out);
   void publishMsg(const sensor_msgs::msg::Imu::SharedPtr msg);
 
   std::string imu_topic_;
@@ -26,4 +34,4 @@ private:
   std::array<double, 4> q_;
 };
 
-# endif // IMU_NODE_HPP_
+# endif // IMU_NODE_GYRO_ACCEL_HPP_
