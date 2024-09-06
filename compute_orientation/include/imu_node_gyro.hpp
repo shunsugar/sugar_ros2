@@ -4,7 +4,7 @@
 #include "rclcpp/rclcpp.hpp"
 #include "sensor_msgs/msg/imu.hpp"
 #include <array>
-#include <cmath> //
+#include <cmath>
 
 class ImuNode : public rclcpp::Node
 {
