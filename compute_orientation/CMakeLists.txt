@@ -20,12 +20,9 @@ install(TARGETS
   DESTINATION lib/${PROJECT_NAME})
 
 # Create cpp executable
-add_executable(imu_node_gyro_accel src/imu_node_gyro_accel.cpp)
-ament_target_dependencies(imu_node_gyro_accel rclcpp sensor_msgs)
+
 
 # Install cpp executable
-install(TARGETS
-  imu_node_gyro_accel
-  DESTINATION lib/${PROJECT_NAME})
+
 
 ament_package()
