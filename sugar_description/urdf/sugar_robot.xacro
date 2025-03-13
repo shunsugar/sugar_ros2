@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="sugar_robot">
+  <xacro:property name="PI" value="3.1415926535897931"/>
+
+  <!-- import gazebo reference -->
+  <xacro:include filename="$(find sugar_description)/xacro/sugar_robot.gazebo"/>
+
+  <!-- import livox 3D-lidar model -->
+  <xacro:include filename="$(find ros2_livox_simulation)/urdf/mid360.xacro"/>
+  <xacro:mid360 name="livox" parent="lidar_stand" topic="mid360">
+    <origin xyz="0.1 0 0.35" rpy="0 0 0"/>
+  </xacro:mid360>
+  
+  <!-- base footprint -->
+  <link name="base_footprint"/>
+
+  <!-- base link -->
+  <joint name="base_joint" type="fixed">
+    <parent link="base_footprint"/>
+    <child link="base_link"/>
+    <origin xyz="0.0 0.0 0.1" rpy="0 0 0"/>
+  </joint>
+  <link name="base_link">
+    <visual>
+      <origin xyz="0.0 0.0 0.2" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.9 0.5 0.4"/>
+      </geometry>
+      <material name="white">
+        <color rgba="1.0 1.0 1.0 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.0 0.0 0.2" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.9 0.5 0.4"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- 3D-lidar stand -->
+  <joint name="lidar_stand_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="lidar_stand"/>
+    <origin xyz="-0.1 0.0 0.4" rpy="0 0 0"/>
+  </joint>
+  <link name="lidar_stand">
+    <visual>
+      <origin xyz="0.0 0.0 0.2" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.05 0.4"/>
+      </geometry>
+      <material name="white">
+        <color rgba="1.0 1.0 1.0 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.0 0.0 0.2" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.05 0.4"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- livox 3D-lidar
+  <joint name="lidar_joint" type="fixed">
+    <parent link="lidar_stand"/>
+    <child link="livox"/>
+    <origin xyz="0.1 0.0 0.35" rpy="0 0 0"/>
+  </joint>
+  <link name="livox">
+    <visual>
+      <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.05" length="0.05"/>
+      </geometry>
+      <material name="white">
+        <color rgba="1.0 1.0 1.0 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.05" length="0.05"/>
+      </geometry>
+    </collision>
+  </link>-->
+
+  <!-- left wheel -->
+  <joint name="left_wheel_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="left_wheel"/>
+    <origin xyz="0.0 0.3 0.0" rpy="1.57079632679 0 0"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+  <link name="left_wheel">
+    <visual>
+      <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.1" length="0.08"/>
+      </geometry>
+      <material name="white">
+        <color rgba="1.0 1.0 1.0 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.1" length="0.05"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- right wheel -->
+  <joint name="right_wheel_joint" type="continuous">
+    <parent link="base_link"/>
+    <child link="right_wheel"/>
+    <origin xyz="0.0 -0.3 0.0" rpy="1.57079632679 0 0"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+  <link name="right_wheel">
+    <visual>
+      <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.1" length="0.08"/>
+      </geometry>
+      <material name="white">
+        <color rgba="1.0 1.0 1.0 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+      <geometry>
+        <cylinder radius="0.1" length="0.05"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- front left caster -->
+  <joint name="front_left_caster_hinge" type="fixed">
+    <parent link="base_link"/>
+    <child link="front_left_caster_link"/>
+    <origin xyz="0.2 0.15 -0.05" rpy="0.0 0.0 0.0"/>
+  </joint>
+  <link name="front_left_caster_link">
+    <visual>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <sphere radius="0.05"/>
+      </geometry>
+      <material name="white">
+        <color rgba="1.0 1.0 1.0 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <sphere radius="0.05"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- front right caster -->
+  <joint name="front_right_caster_hinge" type="fixed">
+    <parent link="base_link"/>
+    <child link="front_right_caster_link"/>
+    <origin xyz="0.2 -0.15 -0.05" rpy="0.0 0.0 0.0"/>
+  </joint>
+  <link name="front_right_caster_link">
+    <visual>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <sphere radius="0.05"/>
+      </geometry>
+      <material name="white">
+        <color rgba="1.0 1.0 1.0 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <sphere radius="0.05"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- rear left caster -->
+  <joint name="rear_left_caster_hinge" type="fixed">
+    <parent link="base_link"/>
+    <child link="rear_left_caster_link"/>
+    <origin xyz="-0.35 0.15 -0.05" rpy="0.0 0.0 0.0"/>
+  </joint>
+  <link name="rear_left_caster_link">
+    <visual>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <sphere radius="0.05"/>
+      </geometry>
+      <material name="white">
+        <color rgba="1.0 1.0 1.0 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <sphere radius="0.05"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- rear right caster -->
+  <joint name="rear_right_caster_hinge" type="fixed">
+    <parent link="base_link"/>
+    <child link="rear_right_caster_link"/>
+    <origin xyz="-0.35 -0.15 -0.05" rpy="0.0 0.0 0.0"/>
+  </joint>
+  <link name="rear_right_caster_link">
+    <visual>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <sphere radius="0.05"/>
+      </geometry>
+      <material name="white">
+        <color rgba="1.0 1.0 1.0 1.0"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <geometry>
+        <sphere radius="0.05"/>
+      </geometry>
+    </collision>
+  </link>
+</robot>
+
