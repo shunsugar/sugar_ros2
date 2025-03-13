@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>sugar_description</name>
+  <version>0.0.0</version>
+  <description>3D models of robot for ROS2 simulation and visualization</description>
+  <maintainer email="shin.ioaoi@gmail.com">Shun Saito</maintainer>
+  <license>Apache-2.0</license>
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <depend>xacro</depend>
+  <depend>urdf</depend>
+  <depend>gazebo_plugins</depend>
+  <depend>velodyne_gazebo_plugins</depend>
+  <depend>orange_sensor_tools</depend>
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>
