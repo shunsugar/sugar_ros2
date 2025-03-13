@@ -1,6 +1,5 @@
 #include <rclcpp/rclcpp.hpp>
 #include <sensor_msgs/msg/point_cloud2.hpp>
-//#include <sensor_msgs/point_field.hpp>
 #include <sensor_msgs/point_cloud2_iterator.hpp>
 
 class LineDetector : public rclcpp::Node {

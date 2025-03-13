@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="use_sim_time" default="false"/>
+  <arg name="xacro_file_path" default="$(find-pkg-share sugar_description)/xacro/sugar_robot.xacro"/>
+  <arg name="world_file_path" default="$(find-pkg-share gazebo_ros)/worlds/empty.world"/>
+  <arg name="config_file_path" default="$(find-pkg-share sugar_description)/rviz2/sugar_robot.rviz"/>
+
+  <!-- robot_state_publisher -->
+  <node pkg="robot_state_publisher" exec="robot_state_publisher">
+    <param name="robot_description" value="$(command 'xacro $(var xacro_file_path)')"/>
+  </node>
+  <!-- joint_state_publisher -->
+  <node pkg="joint_state_publisher" exec="joint_state_publisher">
+    <param name="robot_description" value="$(command 'xacro $(var xacro_file_path)')"/>
+  </node>
+
+  <!-- gzserver -->
+  <include file="$(find-pkg-share gazebo_ros)/launch/gzserver.launch.py">
+    <arg name="use_sim_time" value="$(var use_sim_time)"/>
+    <arg name="world" value="$(var world_file_path)"/>
+  </include>
+  <!-- gzclient -->
+  <include file="$(find-pkg-share gazebo_ros)/launch/gzclient.launch.py">
+    <arg name="use_sim_time" value="$(var use_sim_time)"/>
+  </include>
+
+  <!-- rviz2 -->
+  <node pkg="rviz2" exec="rviz2" args="-d $(var config_file_path)"/>
+</launch>

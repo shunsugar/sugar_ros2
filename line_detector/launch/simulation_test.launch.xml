@@ -1,7 +1,10 @@
 <?xml version="1.0"?>
 <launch>
+  <arg name="use_sim_time" default="true"/>
   <arg name="livox_scan_topic" default="/livox_scan"/>
   <arg name="xacro_file_path" default="$(find-pkg-share orange_description)/xacro/orange_robot.xacro"/>
+  <arg name="pcloud_in_topic" default="/converted_pointcloud2"/>
+  <arg name="pcloud_out_topic" default="/white_line_points"/>
   
   <!-- robot_state_publisher -->
   <node pkg="robot_state_publisher" exec="robot_state_publisher">
@@ -17,5 +20,21 @@
     <remap from="/livox_pointcloud" to="/livox/lidar"/>
   </node>
   <include file="$(find-pkg-share pcd_convert)/launch/pcd_convert.launch.py">
+  </include>
+  
+  <!-- white_line_filter -->
+  <node pkg="line_detector" exec="white_line_filter">
+    <param name="input_topic" value="$(var pcloud_in_topic)"/>
+    <param name="output_topic" value="$(var pcloud_out_topic)"/>
+  </node>
+  
+  <!-- pcloud_to_lscan 
+  <node pkg="line_detector" exec="pcloud_to_lscan">
+    <param name="input_topic" value="$(var pcloud_in_topic)"/>
+    <param name="output_topic" value="$(var pcloud_out_topic)"/>
+  </node>-->
+
+  <!-- pointcloud2_to_laserscan -->
+  <include file="$(find-pkg-share orange_sensor_tools)/launch/livox_to_pointcloud2_laserscan.launch.py">
   </include>
 </launch>
