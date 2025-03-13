@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <launch>
   <arg name="use_sim_time" default="false"/>
-  <arg name="xacro_file_path" default="$(find-pkg-share sugar_description)/xacro/sugar_robot.xacro"/>
+  <arg name="xacro_file_path" default="$(find-pkg-share sugar_description)/urdf/sugar_robot.xacro"/>
   <arg name="world_file_path" default="$(find-pkg-share gazebo_ros)/worlds/empty.world"/>
   <arg name="config_file_path" default="$(find-pkg-share sugar_description)/rviz2/sugar_robot.rviz"/>
 
