@@ -17,16 +17,16 @@ public:
 private:
     void pointCloudCallback(const sensor_msgs::msg::PointCloud2::SharedPtr msg);
 
+    rclcpp::Subscription<sensor_msgs::msg::PointCloud2>::SharedPtr point_cloud_sub_;
+    rclcpp::Publisher<sensor_msgs::msg::PointCloud2>::SharedPtr ground_pub_;
+    rclcpp::Publisher<sensor_msgs::msg::PointCloud2>::SharedPtr obstacle_pub_;
+
     bool is_upside_down_;
     double ground_height_threshold_;
     double lidar_height_;
     std::string pcloud_in_;
     std::string grd_pcloud_out_;
     std::string obs_pcloud_out_;
-
-    rclcpp::Subscription<sensor_msgs::msg::PointCloud2>::SharedPtr point_cloud_sub_;
-    rclcpp::Publisher<sensor_msgs::msg::PointCloud2>::SharedPtr ground_pub_;
-    rclcpp::Publisher<sensor_msgs::msg::PointCloud2>::SharedPtr obstacle_pub_;
 };
 
 #endif // OBSTACLE_DETECTOR_HPP
