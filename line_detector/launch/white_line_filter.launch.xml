@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="use_sim_time" default="true"/>
+  <arg name="pcloud_in_topic" default="/ground_points"/>
+  <arg name="white_line_pcloud_topic" default="/white_line_points"/>
+
+  <!-- white line filter -->
+  <node pkg="line_detector" exec="white_line_filter">
+    <param name="pcloud_in" value="$(var pcloud_in_topic)"/>
+    <param name="white_line_pcloud_out" value="$(var white_line_pcloud_topic)"/>
+  </node>
+</launch>
