@@ -6,10 +6,14 @@
   <xacro:include filename="$(find sugar_description)/urdf/sugar_robot.gazebo"/>
 
   <!-- import livox 3D-lidar model -->
-  <xacro:include filename="$(find ros2_livox_simulation)/urdf/mid360.xacro"/>
+  <xacro:include filename="$(find sugar_description)/urdf/livox.xacro"/>
+  <xacro:sensor_livox name="livox" parent="lidar_stand" min_angle="-2.35619" max_angle="2.35619" samples="720">
+    <origin xyz="0.1 0.0 0.35" rpy="3.1415926535897931 0 0"/>
+  </xacro:sensor_livox>
+  <!--<xacro:include filename="$(find ros2_livox_simulation)/urdf/mid360.xacro"/>
   <xacro:mid360 name="livox" parent="lidar_stand" topic="mid360">
     <origin xyz="0.1 0 0.35" rpy="0 0 0"/>
-  </xacro:mid360>
+  </xacro:mid360>-->
   
   <!-- base footprint -->
   <link name="base_footprint"/>
@@ -67,7 +71,7 @@
     </collision>
   </link>
 
-  <!-- livox 3D-lidar
+  <!-- livox 3D-lidar 
   <joint name="lidar_joint" type="fixed">
     <parent link="lidar_stand"/>
     <child link="livox"/>
