@@ -2,17 +2,17 @@
 
 ObstacleDetector::ObstacleDetector() : Node("obstacle_detector")
 {
-    this->declare_parameter<double>("ground_height_threshold", 0.2);
-    this->declare_parameter<double>("lidar_height", 0.5);
-    this->declare_parameter<bool>("is_upside_down", true);
-    this->get_parameter("ground_height_threshold", ground_height_threshold_);
-    this->get_parameter("lidar_height", lidar_height_);
-    this->get_parameter("is_upside_down", is_upside_down_);
+    is_upside_down_ = this->declare_parameter<bool>("is_upside_down", true);
+    ground_height_threshold_ = this->declare_parameter<double>("ground_height_threshold", 0.32);
+    lidar_height_ = this->declare_parameter<double>("lidar_height", 0.95);
+    pcloud_in_ = this->declare_parameter<std::string>("pcloud_in", "/converted_pointcloud2");
+    grd_pcloud_out_ = this->declare_parameter<std::string>("grd_pcloud_out", "/ground_points");
+    obs_pcloud_out_ = this->declare_parameter<std::string>("obs_pcloud_out", "/obstacle_points");
 
     point_cloud_sub_ = this->create_subscription<sensor_msgs::msg::PointCloud2>(
-        "/converted_pointcloud2", 10, std::bind(&ObstacleDetector::pointCloudCallback, this, std::placeholders::_1));
-    ground_pub_ = this->create_publisher<sensor_msgs::msg::PointCloud2>("/ground_points", 10);
-    obstacle_pub_ = this->create_publisher<sensor_msgs::msg::PointCloud2>("/obstacle_points", 10);
+        pcloud_in_, 10, std::bind(&ObstacleDetector::pointCloudCallback, this, std::placeholders::_1));
+    ground_pub_ = this->create_publisher<sensor_msgs::msg::PointCloud2>(grd_pcloud_out_, 10);
+    obstacle_pub_ = this->create_publisher<sensor_msgs::msg::PointCloud2>(obs_pcloud_out_, 10);
 
     RCLCPP_INFO(this->get_logger(), "Obstacle Detector Node Started.");
 }

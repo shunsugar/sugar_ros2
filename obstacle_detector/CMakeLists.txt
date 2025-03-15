@@ -21,7 +21,7 @@ link_directories(
 )
 
 # install
-install(DIRECTORY include src
+install(DIRECTORY include src launch
   DESTINATION share/${PROJECT_NAME}/)
 
 # ---------- cpp ---------- #

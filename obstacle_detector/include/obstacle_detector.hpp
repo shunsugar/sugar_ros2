@@ -17,9 +17,12 @@ public:
 private:
     void pointCloudCallback(const sensor_msgs::msg::PointCloud2::SharedPtr msg);
 
+    bool is_upside_down_;
     double ground_height_threshold_;
     double lidar_height_;
-    bool is_upside_down_;
+    std::string pcloud_in_;
+    std::string grd_pcloud_out_;
+    std::string obs_pcloud_out_;
 
     rclcpp::Subscription<sensor_msgs::msg::PointCloud2>::SharedPtr point_cloud_sub_;
     rclcpp::Publisher<sensor_msgs::msg::PointCloud2>::SharedPtr ground_pub_;
