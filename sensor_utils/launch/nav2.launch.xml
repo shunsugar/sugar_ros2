@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Arguments -->
+  <arg name="use_sim_time" default="true"/>
+  <arg name="map_file_path" default="$(find-pkg-share kbkn_maps)/maps/hosei/2024/main/nakaniwa_map_1030.yaml"/>
+  <arg name="config_file_path" default="$(find-pkg-share orange_navigation)/config/navigation2_params.yaml"/>
+
+  <!-- Navigation2 -->
+  <include file="$(find-pkg-share nav2_bringup)/launch/bringup_launch.py">
+    <arg name="use_sim_time" value="$(var use_sim_time)"/>
+    <arg name="map" value="$(var map_file_path)"/>
+    <arg name="params_file" value="$(var config_file_path)"/>
+  </include>
+</launch>

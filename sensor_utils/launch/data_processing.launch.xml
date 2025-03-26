@@ -1,0 +1,105 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="use_sim_time" default="true"/>
+  <arg name="pcloud_in_topic" default="/converted_pointcloud2"/>
+  <arg name="grd_pcloud_topic" default="/ground_points"/>
+  <arg name="obs_pcloud_topic" default="/obstacle_points"/>
+  <arg name="grd_pcloud_in_topic" default="/ground_points"/>
+  <arg name="white_line_pcloud_topic" default="/white_line_points"/>
+  <arg name="cloud_in_obs" default="/obstacle_points"/>
+  <arg name="scan_out_obs" default="/obstacle_scan"/>
+  <arg name="cloud_in_wline" default="/white_line_points"/>
+  <arg name="scan_out_wline" default="/white_line_scan"/>
+  <arg name="delete_intensity" default="false"/>
+  <arg name="destination_frame" default="livox_frame"/>
+  <arg name="cloud_destination_topic" default="/merged_cloud"/>
+  <arg name="scan_destination_topic" default="/merged_scan"/>
+  <arg name="laserscan_topics" default="/obstacle_scan /white_line_scan"/>
+  <arg name="kbkn_maps_path" default="hosei/b3/map.yaml"/>
+  <arg name="map_file_path" default="$(find-pkg-share kbkn_maps)/maps/$(var kbkn_maps_path)"/>
+  <arg name="config_file_path" default="$(find-pkg-share path_planner)/config/navigation2_params.yaml"/>
+
+  <!-- obstacle detector -->
+  <node pkg="obstacle_detector" exec="obstacle_detector">
+    <param name="use_sim_time" value="$(var use_sim_time)"/>
+    <param name="is_upside_down" value="true"/>
+    <param name="ground_height_threshold" value="0.32"/>
+    <param name="lidar_height" value="0.95"/>
+    <param name="pcloud_in" value="$(var pcloud_in_topic)"/>
+    <param name="grd_pcloud_out" value="$(var grd_pcloud_topic)"/>
+    <param name="obs_pcloud_out" value="$(var obs_pcloud_topic)"/>
+  </node>
+
+  <!-- white line filter -->
+  <node pkg="line_detector" exec="white_line_filter">
+    <param name="use_sim_time" value="$(var use_sim_time)"/>
+    <param name="pcloud_in" value="$(var grd_pcloud_in_topic)"/>
+    <param name="white_line_pcloud_out" value="$(var white_line_pcloud_topic)"/>
+  </node>
+
+  <!-- pointcloud to laserscan -->
+  <node pkg="pointcloud_to_laserscan" exec="pointcloud_to_laserscan_node" name="pointcloud_to_laserscan_obs" output="screen">
+    <param name="use_sim_time" value="$(var use_sim_time)"/>
+    <param name="target_frame" value="livox_frame"/>
+    <param name="transform_tolerance" value="0.01"/>
+    <param name="min_height" value="-0.3"/>
+    <param name="max_height" value="1.0"/>
+    <param name="angle_min" value="-3.1415"/>
+    <param name="angle_max" value="3.1415"/>
+    <param name="angle_increment" value="0.0174"/>
+    <param name="scan_time" value="0.1"/>
+    <param name="range_min" value="0.4"/>
+    <param name="range_max" value="70.0"/>
+    <param name="use_inf" value="true"/>
+    <param name="inf_epsilon" value="1.0"/>
+    <remap from="cloud_in" to="$(var cloud_in_obs)"/>
+    <remap from="scan" to="$(var scan_out_obs)"/>
+  </node>
+
+  <node pkg="pointcloud_to_laserscan" exec="pointcloud_to_laserscan_node" name="pointcloud_to_laserscan_wline" output="screen">
+    <param name="use_sim_time" value="$(var use_sim_time)"/>
+    <param name="target_frame" value="livox_frame"/>
+    <param name="transform_tolerance" value="0.01"/>
+    <param name="min_height" value="-0.3"/>
+    <param name="max_height" value="1.0"/>
+    <param name="angle_min" value="-3.1415"/>
+    <param name="angle_max" value="3.1415"/>
+    <param name="angle_increment" value="0.0174"/>
+    <param name="scan_time" value="0.1"/>
+    <param name="range_min" value="0.4"/>
+    <param name="range_max" value="70.0"/>
+    <param name="use_inf" value="true"/>
+    <param name="inf_epsilon" value="1.0"/>
+    <remap from="cloud_in" to="$(var cloud_in_wline)"/>
+    <remap from="scan" to="$(var scan_out_wline)"/>
+  </node>
+
+  <!-- laserscan multi merger -->
+  <node pkg="orange_sensor_tools" exec="laserscan_multi_merger">
+    <param name="use_sim_time" value="$(var use_sim_time)"/>
+    <param name="delete_intensity" value="$(var delete_intensity)"/>
+    <param name="destination_frame" value="$(var destination_frame)"/>
+    <param name="cloud_destination_topic" value="$(var cloud_destination_topic)"/>
+    <param name="scan_destination_topic" value="$(var scan_destination_topic)"/>
+    <param name="laserscan_topics" value="$(var laserscan_topics)"/>
+    <!-- LIST OF THE LASER SCAN TOPICS TO SUBSCRIBE -->
+    <param name="angle_min" value="-3.1415"/>
+    <param name="angle_max" value="3.1415"/>
+    <param name="angle_increment" value="0.0174"/>
+    <param name="scan_time" value="0.1"/>
+    <param name="range_min" value="0.4"/>
+    <param name="range_max" value="70.0"/>
+  </node>
+
+  <!-- laserscan to costmap 
+  <node pkg="path_planner" exec="laserscan_to_costmap">
+    <param name="use_sim_time" value="$(var use_sim_time)"/>
+  </node>-->
+
+  <!-- Navigation2 -->
+  <include file="$(find-pkg-share nav2_bringup)/launch/bringup_launch.py">
+    <arg name="use_sim_time" value="$(var use_sim_time)"/>
+    <arg name="map" value="$(var map_file_path)"/>
+    <arg name="params_file" value="$(var config_file_path)"/>
+  </include>
+</launch>

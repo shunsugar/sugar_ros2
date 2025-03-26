@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <robot>
-  <!--front wheels-->
+  <!-- wheel -->
   <gazebo reference="left_wheel">
     <mu1>5.0</mu1>
     <mu2>5.0</mu2>
@@ -17,23 +17,33 @@
     <minDepth>0.001</minDepth>
     <maxVel>1.0</maxVel>
   </gazebo>
-  <!--caster-->
-  <gazebo reference="left_caster_link">
+
+  <!-- caster -->
+  <gazebo reference="front_left_caster">
     <mu1>0.0</mu1>
     <mu2>0.0</mu2>
   </gazebo>
-  <gazebo reference="right_caster_link">
+  <gazebo reference="front_right_caster">
     <mu1>0.0</mu1>
     <mu2>0.0</mu2>
   </gazebo>
-  <!--plugins-->
+  <gazebo reference="rear_left_caster">
+    <mu1>0.0</mu1>
+    <mu2>0.0</mu2>
+  </gazebo>
+  <gazebo reference="rear_right_caster">
+    <mu1>0.0</mu1>
+    <mu2>0.0</mu2>
+  </gazebo>
+
+  <!-- plugins -->
   <gazebo>
     <plugin name="diff_drive_controller" filename="libgazebo_ros_diff_drive.so">
       <update_rate>30</update_rate>
       <left_joint>left_wheel_hinge</left_joint>
       <right_joint>right_wheel_hinge</right_joint>
-      <wheel_separation>0.5672</wheel_separation>
-      <wheel_diameter>0.203</wheel_diameter>
+      <wheel_separation>0.6</wheel_separation>
+      <wheel_diameter>0.2</wheel_diameter>
       <max_wheel_torque>20</max_wheel_torque>
       <max_wheel_acceleration>2.0</max_wheel_acceleration>
       <command_topic>cmd_vel</command_topic>

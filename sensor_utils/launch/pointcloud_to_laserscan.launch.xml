@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="use_sim_time" default="true"/>
+  <arg name="cloud_in_obs" default="/obstacle_points"/>
+  <arg name="scan_out_obs" default="/obstacle_scan"/>
+  <arg name="cloud_in_wline" default="/white_line_points"/>
+  <arg name="scan_out_wline" default="/white_line_scan"/>
+
+  <!-- pointcloud to laserscan -->
+  <node pkg="pointcloud_to_laserscan" exec="pointcloud_to_laserscan_node" name="pointcloud_to_laserscan_obs" output="screen">
+    <remap from="cloud_in" to="$(var cloud_in_obs)"/>
+    <remap from="scan" to="$(var scan_out_obs)"/>
+    <param name="target_frame" value="livox_frame"/>
+    <param name="transform_tolerance" value="0.01"/>
+    <param name="min_height" value="-0.3"/>
+    <param name="max_height" value="1.0"/>
+    <param name="angle_min" value="-3.1415"/>
+    <param name="angle_max" value="3.1415"/>
+    <param name="angle_increment" value="0.0174"/>
+    <param name="scan_time" value="0.1"/>
+    <param name="range_min" value="0.4"/>
+    <param name="range_max" value="70.0"/>
+    <param name="use_inf" value="true"/>
+    <param name="inf_epsilon" value="1.0"/>
+  </node>
+
+  <node pkg="pointcloud_to_laserscan" exec="pointcloud_to_laserscan_node" name="pointcloud_to_laserscan_wline" output="screen">
+    <remap from="cloud_in" to="$(var cloud_in_wline)"/>
+    <remap from="scan" to="$(var scan_out_wline)"/>
+    <param name="target_frame" value="livox_frame"/>
+    <param name="transform_tolerance" value="0.01"/>
+    <param name="min_height" value="-0.3"/>
+    <param name="max_height" value="1.0"/>
+    <param name="angle_min" value="-3.1415"/>
+    <param name="angle_max" value="3.1415"/>
+    <param name="angle_increment" value="0.0174"/>
+    <param name="scan_time" value="0.1"/>
+    <param name="range_min" value="0.4"/>
+    <param name="range_max" value="70.0"/>
+    <param name="use_inf" value="true"/>
+    <param name="inf_epsilon" value="1.0"/>
+  </node>
+</launch>

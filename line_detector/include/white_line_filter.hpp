@@ -10,15 +10,16 @@
 class WhiteLineFilter : public rclcpp::Node
 {
 public:
-  WhiteLineFilter();
+    WhiteLineFilter();
 
 private:
-  void pointCloudCallback(const sensor_msgs::msg::PointCloud2::SharedPtr msg);
-  rclcpp::Subscription<sensor_msgs::msg::PointCloud2>::SharedPtr lidar_sub_;
-  rclcpp::Publisher<sensor_msgs::msg::PointCloud2>::SharedPtr white_line_pub_;
+    void pointCloudCallback(const sensor_msgs::msg::PointCloud2::SharedPtr msg);
 
-  std::string input_topic_;
-  std::string output_topic_;
+    rclcpp::Subscription<sensor_msgs::msg::PointCloud2>::SharedPtr point_cloud_sub_;
+    rclcpp::Publisher<sensor_msgs::msg::PointCloud2>::SharedPtr white_line_pub_;
+
+    std::string pcloud_in_;
+    std::string wline_pcloud_out_;
 };
 
 #endif // WHITE_LINE_FILTER_HPP

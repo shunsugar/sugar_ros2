@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="use_sim_time" default="true"/>
+  <arg name="pcloud_in_topic" default="/converted_pointcloud2"/>
+  <arg name="grd_pcloud_topic" default="/ground_points"/>
+  <arg name="obs_pcloud_topic" default="/obstacle_points"/>
+
+  <!-- obstacle detector -->
+  <node pkg="obstacle_detector" exec="obstacle_detector">
+    <param name="is_upside_down" value="true"/>
+    <param name="ground_height_threshold" value="0.32"/>
+    <param name="lidar_height" value="0.95"/>
+    <param name="pcloud_in" value="$(var pcloud_in_topic)"/>
+    <param name="grd_pcloud_out" value="$(var grd_pcloud_topic)"/>
+    <param name="obs_pcloud_out" value="$(var obs_pcloud_topic)"/>
+  </node>
+</launch>
