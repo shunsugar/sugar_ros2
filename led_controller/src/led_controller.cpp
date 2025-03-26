@@ -7,7 +7,7 @@ LedController::LedController()
 {
     try
     {
-        serial_port_.setPort("/sensors/LED");
+        serial_port_.setPort("/dev/sensors/LED");
         serial_port_.setBaudrate(115200);
         serial::Timeout to = serial::Timeout::simpleTimeout(1000);
         serial_port_.setTimeout(to);
@@ -22,7 +22,6 @@ LedController::LedController()
         "/nav_state", 10, std::bind(&LedController::navCallback, this, std::placeholders::_1));
     estop_sub_ = this->create_subscription<std_msgs::msg::Bool>(
         "/estop_state", 10, std::bind(&LedController::estopCallback, this, std::placeholders::_1));
-    //led_pub_ = this->create_publisher<std_msgs::msg::Bool>("/LED_state", 10);
     timer_ = this->create_wall_timer(200ms, std::bind(&LedController::sendSerialCommand, this));
 }
 
@@ -37,13 +36,13 @@ LedController::~LedController()
 void LedController::navCallback(const std_msgs::msg::Bool::SharedPtr msg)
 {
     nav_state_ = msg->data;
-    RCLCPP_INFO(this->get_logger(), "Received /nav_state: ");
+    // RCLCPP_INFO(this->get_logger(), "Received /nav_state: ");
 }
 
 void LedController::estopCallback(const std_msgs::msg::Bool::SharedPtr msg)
 {
     estop_state_ = msg->data;
-    RCLCPP_INFO(this->get_logger(), "Received /estop_state: ");
+    // RCLCPP_INFO(this->get_logger(), "Received /estop_state: ");
 }
 
 void LedController::sendSerialCommand()
@@ -62,19 +61,15 @@ void LedController::sendSerialCommand()
     {
         led_state_ = "OFF";
     }
-    else
+    else if (!nav_state_ && estop_state_)
     {
        led_state_ = "OFF";
     }
     
-    //msg.data = led_state_;
-    //led_pub_->publish(msg);
-    //RCLCPP_INFO(this->get_logger(), "Publish /LED_state: %s", led_state_ ? "true" : "false");
-    
     if (serial_port_.isOpen())
     {
         serial_port_.write(led_state_ + "\n");
-        RCLCPP_INFO(this->get_logger(), "Sent: %s", led_state_.c_str());
+        // RCLCPP_INFO(this->get_logger(), "Sent: %s", led_state_.c_str());
     }
     else
     {
