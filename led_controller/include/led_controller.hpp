@@ -24,6 +24,8 @@ private:
 
     serial::Serial serial_port_;
 
+    std::string port_name_;
+    int baud_rate_;
     bool nav_state_;
     bool estop_state_;
     std::string led_state_;

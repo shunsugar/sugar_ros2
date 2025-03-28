@@ -5,10 +5,13 @@ using namespace std::chrono_literals;
 LedController::LedController()
     : Node("LED_controller"), nav_state_(false), estop_state_(false)
 {
+    port_name_ = this->declare_parameter<std::string>("serial_port", "/dev/sensors/LED");
+    baud_rate_ = this->declare_parameter<int>("baud_rate", 115200);
+
     try
     {
-        serial_port_.setPort("/dev/sensors/LED");
-        serial_port_.setBaudrate(115200);
+        serial_port_.setPort(port_name_);
+        serial_port_.setBaudrate(baud_rate_);
         serial::Timeout to = serial::Timeout::simpleTimeout(1000);
         serial_port_.setTimeout(to);
         serial_port_.open();
@@ -16,6 +19,8 @@ LedController::LedController()
     catch (const std::exception &e)
     {
         RCLCPP_ERROR(this->get_logger(), "Failed to open serial port: %s", e.what());
+        rclcpp::shutdown();
+        return;
     }
 
     nav_sub_ = this->create_subscription<std_msgs::msg::Bool>(
@@ -23,12 +28,18 @@ LedController::LedController()
     estop_sub_ = this->create_subscription<std_msgs::msg::Bool>(
         "/estop_state", 10, std::bind(&LedController::estopCallback, this, std::placeholders::_1));
     timer_ = this->create_wall_timer(200ms, std::bind(&LedController::sendSerialCommand, this));
+
+    if (serial_port_.isOpen())
+    {
+        serial_port_.write("ON\n");
+    }
 }
 
 LedController::~LedController()
 {
     if (serial_port_.isOpen())
     {
+        serial_port_.write("OFF\n");
         serial_port_.close();
     }
 }
@@ -36,40 +47,28 @@ LedController::~LedController()
 void LedController::navCallback(const std_msgs::msg::Bool::SharedPtr msg)
 {
     nav_state_ = msg->data;
-    // RCLCPP_INFO(this->get_logger(), "Received /nav_state: ");
 }
 
 void LedController::estopCallback(const std_msgs::msg::Bool::SharedPtr msg)
 {
     estop_state_ = msg->data;
-    // RCLCPP_INFO(this->get_logger(), "Received /estop_state: ");
 }
 
 void LedController::sendSerialCommand()
 {
-    auto msg = std_msgs::msg::Bool();
-
-    if (nav_state_ && !estop_state_)
-    {
-        led_state_ = "ON";
-    }
-    else if (nav_state_ && estop_state_)
-    {
-        led_state_ = "OFF";
-    }
-    else if (!nav_state_ && !estop_state_)
-    {
-        led_state_ = "OFF";
-    }
-    else if (!nav_state_ && estop_state_)
-    {
-       led_state_ = "OFF";
-    }
+    led_state_ = (nav_state_ && !estop_state_) ? "FLASH" : "SOLID";
     
     if (serial_port_.isOpen())
     {
-        serial_port_.write(led_state_ + "\n");
-        // RCLCPP_INFO(this->get_logger(), "Sent: %s", led_state_.c_str());
+        try
+        {
+            serial_port_.write(led_state_ + "\n");
+            // RCLCPP_INFO(this->get_logger(), "Sent: %s", led_state_.c_str());
+        }
+        catch (const std::exception &e)
+        {
+            RCLCPP_ERROR(this->get_logger(), "Failed to write to serial port: %s", e.what());
+        }
     }
     else
     {
