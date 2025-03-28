@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+
+<package format="3">
+  <name>path_planner</name>
+  <version>0.0.0</version>
+  <description>path_planner</description>
+  <maintainer email="shun.saito.6t@stu.hosei.ac.jp">shunsugar</maintainer>
+  <license>Apache-2.0</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  
+  <depend>rclcpp</depend>
+  <depend>sensor_msgs</depend>
+  <depend>pcl_conversions</depend>
+  <depend>pcl_ros</depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>
