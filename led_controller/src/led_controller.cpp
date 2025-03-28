@@ -19,8 +19,6 @@ LedController::LedController()
     catch (const std::exception &e)
     {
         RCLCPP_ERROR(this->get_logger(), "Failed to open serial port: %s", e.what());
-        rclcpp::shutdown();
-        return;
     }
 
     nav_sub_ = this->create_subscription<std_msgs::msg::Bool>(
