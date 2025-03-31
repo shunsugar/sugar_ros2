@@ -2,9 +2,10 @@
 <launch>
   <arg name="use_sim_time" default="true"/>
   <arg name="livox_scan_topic" default="/livox_scan"/>
-  <arg name="xacro_file_path" default="$(find-pkg-share orange_description)/xacro/orange_robot.xacro"/>
   <arg name="pcloud_in_topic" default="/converted_pointcloud2"/>
   <arg name="pcloud_out_topic" default="/white_line_points"/>
+  <arg name="xacro_file_path" default="$(find-pkg-share orange_description)/xacro/orange_robot.xacro"/>
+  <arg name="config_file_path" default="$(find-pkg-share sugar_description)/rviz2/sugar_robot.rviz"/>
 
   <!-- robot_state_publisher -->
   <node pkg="robot_state_publisher" exec="robot_state_publisher">
@@ -18,10 +19,24 @@
     <param name="robot_description" value="$(command 'xacro $(var xacro_file_path)')"/>
   </node>
 
+  <!-- rviz2 -->
+  <node pkg="rviz2" exec="rviz2" args="-d $(var config_file_path)"/>
+
   <!-- mid360 -->
   <node pkg="livox_to_pointcloud2" exec="livox_to_pointcloud2_node">
     <param name="use_sim_time" value="$(var use_sim_time)"/>
     <remap from="/livox_pointcloud" to="/livox/lidar"/>
   </node>
   <!--<include file="$(find-pkg-share pcd_convert)/launch/pcd_convert.launch.py"/>-->
+
+  <!-- GPS -->
+  <!-- GPSposition converter -->
+  <node pkg="gnss_receiver" exec="lonlat_to_odom.py" output="screen">
+    <param name="use_sim_time" value="$(var use_sim_time)"/>
+    <param name="Position_magnification" value="1.675"/>
+  </node>
+  <!-- combination_GPSposition_GPSheading -->
+  <node pkg="gnss_receiver" exec="combination_tf.py" output="screen">
+    <param name="use_sim_time" value="$(var use_sim_time)"/>
+  </node>
 </launch>
