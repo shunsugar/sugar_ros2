@@ -15,9 +15,21 @@
   <arg name="cloud_destination_topic" default="/merged_cloud"/>
   <arg name="scan_destination_topic" default="/merged_scan"/>
   <arg name="laserscan_topics" default="/obstacle_scan /white_line_scan"/>
-  <arg name="kbkn_maps_path" default="hosei/b3/map.yaml"/>
+  <arg name="slam_config_file_path" default="$(find-pkg-share sensor_utils)/config/slam_toolbox_params.yaml"/>
+  <arg name="kbkn_maps_path" default="hosei/2023/b3/map.yaml"/>
   <arg name="map_file_path" default="$(find-pkg-share kbkn_maps)/maps/$(var kbkn_maps_path)"/>
   <arg name="config_file_path" default="$(find-pkg-share path_planner)/config/navigation2_params.yaml"/>
+
+  <!-- GPS -->
+  <!-- GPSposition converter 
+  <node pkg="orange_bringup" exec="lonlat_to_odom" output="screen">
+    <param name="use_sim_time" value="$(var use_sim_time)"/>
+    <param name="Position_magnification" value="1.675"/>
+  </node>-->
+  <!-- combination_GPSposition_GPSheading 
+  <node pkg="orange_bringup" exec="combination" output="screen">
+    <param name="use_sim_time" value="$(var use_sim_time)"/>
+  </node>-->
 
   <!-- obstacle detector -->
   <node pkg="obstacle_detector" exec="obstacle_detector">
@@ -95,6 +107,12 @@
   <node pkg="path_planner" exec="laserscan_to_costmap">
     <param name="use_sim_time" value="$(var use_sim_time)"/>
   </node>-->
+
+  <!-- slam_toolbox -->
+  <node pkg="slam_toolbox" exec="async_slam_toolbox_node">
+    <param name="use_sim_time" value="$(var use_sim_time)"/>
+    <param from="$(var slam_config_file_path)"/>
+  </node>
 
   <!-- Navigation2 -->
   <include file="$(find-pkg-share nav2_bringup)/launch/bringup_launch.py">
