@@ -8,7 +8,7 @@ find_package(nav_msgs REQUIRED)
 find_package(tf2_ros REQUIRED)
 
 # install
-install(DIRECTORY include src
+install(DIRECTORY src
   DESTINATION share/${PROJECT_NAME}/)
 
 # ---------- cpp ---------- #
