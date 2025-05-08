@@ -7,6 +7,7 @@ find_package(rclcpp REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(nav_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
+find_package(tf2_ros REQUIRED)
 
 # Add include directories
 include_directories(
@@ -20,7 +21,7 @@ install(DIRECTORY config include launch src
 # ---------- cpp ---------- #
 # Create cpp executable
 add_executable(imu_to_odom src/imu_to_odom.cpp)
-ament_target_dependencies(imu_to_odom rclcpp sensor_msgs nav_msgs geometry_msgs)
+ament_target_dependencies(imu_to_odom rclcpp sensor_msgs nav_msgs geometry_msgs tf2_ros)
 
 # Install cpp executable
 install(TARGETS imu_to_odom
