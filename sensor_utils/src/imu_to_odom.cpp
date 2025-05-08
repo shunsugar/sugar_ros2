@@ -9,7 +9,7 @@ ImuToOdom::ImuToOdom() : Node("imu_to_odom")
   imu_sub_ = this->create_subscription<sensor_msgs::msg::Imu>(
     input_topic_, 10, std::bind(&ImuToOdom::imuCallback, this, std::placeholders::_1));
   odom_pub_ = this->create_publisher<nav_msgs::msg::Odometry>(output_topic_, 10);
-  std::shared_ptr<tf2_ros::TransformBroadcaster> tf_broadcaster_;
+  tf_broadcaster_ = std::make_shared<tf2_ros::TransformBroadcaster>(this);
 
   last_time_ = this->get_clock()->now();
 
