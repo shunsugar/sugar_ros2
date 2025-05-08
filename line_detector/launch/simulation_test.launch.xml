@@ -22,7 +22,15 @@
   <!-- rviz2 -->
   <node pkg="rviz2" exec="rviz2" args="-d $(var config_file_path)"/>
 
+  <!-- motor -->
+  <node pkg="vehicle_controller" exec="odom_tf_broadcaster">
+    <param name="use_sim_time" value="$(var use_sim_time)"/>
+  </node>
+
   <!-- mid360 -->
+  <!--<node pkg="livox_to_pointcloud2" exec="livox_tf_broadcaster">
+    <param name="use_sim_time" value="$(var use_sim_time)"/>
+  </node>-->
   <node pkg="livox_to_pointcloud2" exec="livox_to_pointcloud2_node">
     <param name="use_sim_time" value="$(var use_sim_time)"/>
     <remap from="/livox_pointcloud" to="/livox/lidar"/>
@@ -36,7 +44,7 @@
     <param name="Position_magnification" value="1.675"/>
   </node>
   <!-- combination_GPSposition_GPSheading -->
-  <node pkg="gnss_receiver" exec="combination_tf.py" output="screen">
+  <node pkg="gnss_receiver" exec="combination.py" output="screen">
     <param name="use_sim_time" value="$(var use_sim_time)"/>
   </node>
 </launch>
