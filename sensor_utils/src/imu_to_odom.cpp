@@ -9,6 +9,7 @@ ImuToOdom::ImuToOdom() : Node("imu_to_odom")
   imu_sub_ = this->create_subscription<sensor_msgs::msg::Imu>(
     input_topic_, 10, std::bind(&ImuToOdom::imuCallback, this, std::placeholders::_1));
   odom_pub_ = this->create_publisher<nav_msgs::msg::Odometry>(output_topic_, 10);
+  tf_broadcaster_ = std::make_shared<tf2_ros::TransformBroadcaster>(this);
 
   last_time_ = this->get_clock()->now();
 
@@ -32,6 +33,7 @@ void ImuToOdom::imuCallback(const sensor_msgs::msg::Imu::SharedPtr msg)
   position_.y += velocity_.y * dt;
   position_.z += velocity_.z * dt;
 
+  // Odom
   nav_msgs::msg::Odometry odom_msg;
   odom_msg.header.stamp = current_time;
   odom_msg.header.frame_id = frame_id_;
@@ -42,6 +44,19 @@ void ImuToOdom::imuCallback(const sensor_msgs::msg::Imu::SharedPtr msg)
   odom_msg.twist.twist.angular = msg->angular_velocity;
 
   odom_pub_->publish(odom_msg);
+
+  // TF
+  geometry_msgs::msg::TransformStamped t;
+  t.header.stamp = current_time;
+  t.header.frame_id = "odom";
+  t.child_frame_id = "base_link";
+
+  t.transform.translation.x = position_.x;
+  t.transform.translation.y = position_.y;
+  t.transform.translation.z = position_.z;
+  t.transform.rotation = msg->orientation;
+
+  tf_broadcaster_->sendTransform(t);
 }
 
 int main(int argc, char *argv[])
