@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="use_sim_time" default="true"/>
+  <arg name="imu_topic" default="/imu"/>
+  <arg name="odom_topic" default="/odom"/>
+  <arg name="fused_odom_topic" default="/odom/wheel_imu"/>
+  <arg name="scale_factor" default="0.45"/>
+  <arg name="publish_odom" default="true"/>
+  <arg name="publish_TF" default="true"/>
+  <arg name="debug" default="true"/>
+
+  <!-- wheel_imu_odom -->
+  <node pkg="sensor_utils" exec="wheel_imu_odom">
+    <param name="use_sim_time" value="$(var use_sim_time)"/>
+    <param name="imu_topic" value="$(var imu_topic)"/>
+    <param name="odom_topic" value="$(var odom_topic)"/>
+    <param name="fused_odom_topic" value="$(var fused_odom_topic)"/>
+    <param name="odom_header_frame" value="odom"/>
+    <param name="odom_child_frame" value="base_footprint"/>
+    <param name="TF_header_frame" value="odom"/>
+    <param name="TF_child_frame" value="base_footprint"/>
+    <param name="scale_factor" value="$(var scale_factor)"/>
+    <param name="publish_odom" value="$(var publish_odom)"/>
+    <param name="publish_TF" value="$(var publish_TF)"/>
+    <param name="debug" value="$(var debug)"/>
+  </node>
+</launch>
