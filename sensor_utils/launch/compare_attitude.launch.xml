@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="use_sim_time" default="true"/>
+
+  <!-- quat attitude estimator -->
+  <node pkg="cxd5602pwbimu" exec="quat_attitude_estimator">
+    <param name="use_sim_time" value="$(var use_sim_time)"/>
+    <param name="input_topic" value="/imu/spresense"/>
+    <param name="output_topic" value="/imu/spresense/inityaw1"/>
+  </node>
+  <!-- wheel_imu_odom for spresense imu -->
+  <node pkg="cxd5602pwbimu" exec="wheel_spimu_odom" name="wheel_spimu_odom1">
+    <param name="use_sim_time" value="$(var use_sim_time)"/>
+    <param name="odom_topic" value="/odom"/>
+    <param name="imu_topic" value="/imu/spresense/inityaw1"/>
+    <param name="fused_odom_topic" value="/odom/wheel_spimu1"/>
+    <param name="publish_TF" value="false"/>
+  </node>
+
+  <!-- madgwick filter node -->
+  <node pkg="imu_filter_madgwick" exec="imu_filter_madgwick_node" name="madgwick_filter">
+    <param name="use_sim_time" value="$(var use_sim_time)"/>
+    <param from="$(find-pkg-share cxd5602pwbimu)/config/madgwick.yaml"/>
+    <remap from="/imu/data_raw" to="/imu/spresense"/>
+    <remap from="/imu/data" to="/imu/spresense/madgwick"/>
+  </node>
+  <!-- initial yaw corrector -->
+  <node pkg="cxd5602pwbimu" exec="initial_yaw_corrector" name="spimu_yaw_corrector2">
+    <param name="use_sim_time" value="$(var use_sim_time)"/>
+    <param name="input_topic" value="/imu/spresense/madgwick"/>
+    <param name="output_topic" value="/imu/spresense/inityaw2"/>
+  </node>
+  <!-- wheel_imu_odom for spresense imu -->
+  <node pkg="cxd5602pwbimu" exec="wheel_spimu_odom" name="wheel_spimu_odom2">
+    <param name="use_sim_time" value="$(var use_sim_time)"/>
+    <param name="odom_topic" value="/odom"/>
+    <param name="imu_topic" value="/imu/spresense/inityaw2"/>
+    <param name="fused_odom_topic" value="/odom/wheel_spimu2"/>
+    <param name="publish_TF" value="false"/>
+  </node>
+
+  <!-- complementary filter node -->
+  <node pkg="imu_complementary_filter" exec="complementary_filter_node" name="complementary_filter">
+    <param name="use_sim_time" value="$(var use_sim_time)"/>
+    <param from="$(find-pkg-share cxd5602pwbimu)/config/madgwick.yaml"/>
+    <remap from="/imu/data_raw" to="/imu/spresense"/>
+    <remap from="/imu/data" to="/imu/spresense/complementary"/>
+  </node>
+  <!-- initial yaw corrector -->
+  <node pkg="cxd5602pwbimu" exec="initial_yaw_corrector" name="spimu_yaw_corrector3">
+    <param name="use_sim_time" value="$(var use_sim_time)"/>
+    <param name="input_topic" value="/imu/spresense/complementary"/>
+    <param name="output_topic" value="/imu/spresense/inityaw3"/>
+  </node>
+  <!-- wheel_imu_odom for spresense imu -->
+  <node pkg="cxd5602pwbimu" exec="wheel_spimu_odom" name="wheel_spimu_odom3">
+    <param name="use_sim_time" value="$(var use_sim_time)"/>
+    <param name="odom_topic" value="/odom"/>
+    <param name="imu_topic" value="/imu/spresense/inityaw3"/>
+    <param name="fused_odom_topic" value="/odom/wheel_spimu3"/>
+    <param name="publish_TF" value="false"/>
+  </node>
+</launch>

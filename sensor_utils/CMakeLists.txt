@@ -3,7 +3,10 @@ project(sensor_utils)
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
+find_package(ament_cmake_python REQUIRED)
 find_package(rclcpp REQUIRED)
+find_package(rclpy REQUIRED)
+find_package(std_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(nav_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
@@ -17,7 +20,7 @@ include_directories(
 )
 
 # install
-install(DIRECTORY config include launch src
+install(DIRECTORY config include launch scripts src
   DESTINATION share/${PROJECT_NAME}/)
 
 # ---------- cpp ---------- #
@@ -49,6 +52,50 @@ ament_target_dependencies(wheel_imu_odom
 
 # Install cpp executable
 install(TARGETS wheel_imu_odom
+  DESTINATION lib/${PROJECT_NAME})
+
+# ---------- py ---------- #
+# Create and install py executable
+ament_python_install_package(${PROJECT_NAME})
+
+install(PROGRAMS
+  scripts/yaw_kf_node.py
+  DESTINATION lib/${PROJECT_NAME})
+
+install(PROGRAMS
+  scripts/sat_kf_node.py
+  DESTINATION lib/${PROJECT_NAME})
+
+install(PROGRAMS
+  scripts/vec_kf_node.py
+  DESTINATION lib/${PROJECT_NAME})
+
+install(PROGRAMS
+  scripts/nis_kf_node.py
+  DESTINATION lib/${PROJECT_NAME})
+
+install(PROGRAMS
+  scripts/my_kf_node.py
+  DESTINATION lib/${PROJECT_NAME})
+
+install(PROGRAMS
+  scripts/my2_kf_node.py
+  DESTINATION lib/${PROJECT_NAME})
+
+install(PROGRAMS
+  scripts/odom_csv_saver.py
+  DESTINATION lib/${PROJECT_NAME})
+
+install(PROGRAMS
+  scripts/try_node.py
+  DESTINATION lib/${PROJECT_NAME})
+
+install(PROGRAMS
+  scripts/yaw_csv_saver.py
+  DESTINATION lib/${PROJECT_NAME})
+
+install(PROGRAMS
+  scripts/angle_diff.py
   DESTINATION lib/${PROJECT_NAME})
 
 ament_package()
